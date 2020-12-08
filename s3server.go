@@ -151,18 +151,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	log.Debug("value of r.RequestURI: ", r.RequestURI)
 	log.Debug("value of r.URL.EscapedPath(): ", r.URL.EscapedPath())
 
-	if result.Metadata == nil || result.ContentType == nil {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("404 - File Not Found"))
+	if result.ContentType != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("500 - Internal server error"))
+		log.Debug("File has no valid ContentType")
 		return
 	}
 
-	if result.ContentType != nil {
-		if *result.ContentType == "application/x-directory" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("404 - File Not Found"))
-			return
-		}
+	if *result.ContentType == "application/x-directory" {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("404 - File Not Found"))
+		return
 	}
 
 	media := Media{
