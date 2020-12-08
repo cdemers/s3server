@@ -1,2 +1,3 @@
 *.nogit.*
 s3server
+.idea

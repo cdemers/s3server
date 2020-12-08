@@ -54,8 +54,6 @@ type Media struct {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	log.Debug("entering the handler() function")
-
 	s3Key := r.URL.EscapedPath()
 	requestURI := r.URL.RequestURI()
 
@@ -129,24 +127,21 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	result, err := svc.GetObject(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
+			log.Error(aerr.Error())
 			switch aerr.Code() {
 			case s3.ErrCodeNoSuchKey:
-				log.Error(s3.ErrCodeNoSuchKey, aerr.Error())
 				w.WriteHeader(http.StatusNotFound)
 				w.Write([]byte("404 - File Not Found"))
 				return
 			default:
-				log.Error(aerr.Error())
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte("500 - Internal Server Error"))
 				return
 			}
 		} else {
-			// Print the error, cast err to awserr.Error to get the Code and
-			// Message from an error.
+			log.Error(err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("500 - Internal Server Error"))
-			log.Error(err.Error())
 			return
 		}
 
