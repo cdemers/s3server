@@ -26,7 +26,7 @@ import (
 )
 
 var (
-	version = "0.3.1"
+	version = "0.3.2"
 
 	debugMode              = kingpin.Flag("debug", "Debug mode.").Envar("DEBUG").Bool()
 	heartbeatRoute         = kingpin.Flag("heartbeat-route", "The HTTP route of the heartbeat check, include the slashes when necessary  (env: HEARTBEAT_ROUTE).").Default("/health").Envar("HEARTBEAT_ROUTE").String()
