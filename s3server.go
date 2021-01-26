@@ -151,7 +151,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	log.Debug("value of r.RequestURI: ", r.RequestURI)
 	log.Debug("value of r.URL.EscapedPath(): ", r.URL.EscapedPath())
 
-	if result.ContentType != nil {
+	if result.ContentType == nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("500 - Internal server error"))
 		log.Debug("File has no valid ContentType")
